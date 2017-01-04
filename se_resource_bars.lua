@@ -2,9 +2,6 @@ local wm = GetWindowManager()
 local hp = ZO_PlayerAttributeHealth
 local mp = ZO_PlayerAttributeMagicka
 local sp = ZO_PlayerAttributeStamina
-local ww = ZO_PlayerAttributeWerewolf
-local sh = ZO_PlayerAttributeSiegeHealth
-local ms = ZO_PlayerAttributeMountStamina
 
 local SE_ResourceBars = SimpleExtension.Create("SE_RESOURCE_BARS", 1)
 
@@ -72,19 +69,14 @@ function SE_ResourceBars:toggleCenterResourceBars()
 
     if self.settings.center_resource_bars then
         local anchors = {
-            [hp] = {TOP     , rb, TOP       ,   0,  0},
-            [sp] = {LEFT    , hp, RIGHT     ,  16,  0},
-            [mp] = {RIGHT   , hp, LEFT      , -16,  0},
+            [hp] = {CENTER  , rb, CENTER    ,  0,  0},
+            [sp] = {LEFT    , hp, RIGHT     ,  8,  0},
+            [mp] = {RIGHT   , hp, LEFT      , -8,  0},
         }
         for bar, data in pairs(anchors) do
             local w, h = bar:GetDimensions()
             bar:ClearAnchors()
             bar:SetAnchor(unpack(data))
-        end
-
-        for _, bar in ipairs({sh, ww, ms}) do
-            local isValid, point, relTo, relPoint, offsX, offsY = bar:GetAnchor()
-            bar:SetAnchor(point, relTo, relPoint, offsX, 2)
         end
     else
         self:restoreDefaultAnchors()
@@ -92,7 +84,7 @@ function SE_ResourceBars:toggleCenterResourceBars()
 end
 
 function SE_ResourceBars:saveDefaultAnchors()
-    for _, bar in ipairs({hp, sp, mp, sh, ww, ms}) do
+    for _, bar in ipairs({hp, sp, mp}) do
         local isValid, point, relTo, relPoint, offsX, offsY = bar:GetAnchor()
         self.default_anchors[bar] = {point, relTo, relPoint, offsX, offsY}
     end
