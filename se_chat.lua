@@ -1,5 +1,17 @@
 local SE_Chat = SimpleExtension.Create("SE_CHAT", 1)
 
+SE_Chat.CHAT = {
+    NEVER_FADE       = 0,
+    DEFAULT_BEGIN    = 25,
+    DEFAULT_DURATION = 2,
+
+    setFadeness = function(begin, duration)
+        for tabIndex, tabObject in ipairs(CHAT_SYSTEM.primaryContainer.windows) do
+            tabObject.buffer:SetLineFade(begin, duration)
+        end
+    end
+}
+
 function SE_Chat:New()
     local obj = ZO_Object.New(self)
 
@@ -34,6 +46,7 @@ function SE_Chat:New()
 
             setFunc = function(value)
                 obj.settings.is_always_present = value
+                obj:toggleAlwaysPresent()
             end
         },
     })
@@ -43,6 +56,12 @@ end
 
 function SE_Chat:Run()
     EVENT_MANAGER:RegisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED, function()
+        self.backupCreateNewChatTab = CHAT_SYSTEM.CreateNewChatTab
+        self.customCreateNewChatTab = function(instance, ...)
+            self.createNewChatTabBackup(instance, ...)
+            self.CHAT.setFadeness(self.CHAT.NEVER_FADE, self.CHAT.NEVER_FADE)
+        end
+
         self:toggleAlwaysPresent()
         EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
     end)
@@ -61,30 +80,11 @@ function SE_Chat:toggleFullResize()
 end
 
 function SE_Chat:toggleAlwaysPresent(begin, duration)
-    local NEVER_FADE = 0
-    local function setChatFadeness()
-        for tabIndex, tabObject in ipairs(CHAT_SYSTEM.primaryContainer.windows) do
-            tabObject.buffer:SetLineFade(begin, duration)
-        end
-    end
-
     if self.settings.is_always_present then
-        if not self.CreateNewChatTabBackup then
-            self.CreateNewChatTabBackup = CHAT_SYSTEM.CreateNewChatTab
-        end
-
-        CHAT_SYSTEM.CreateNewChatTab = function(instance, ...)
-            self.CreateNewChatTabBackup(instance, ...)
-            setChatFadeness(NEVER_FADE, NEVER_FADE)
-        end
-
-        setChatFadeness(NEVER_FADE, NEVER_FADE)
+        CHAT_SYSTEM.CreateNewChatTab = self.customCreateNewChatTab
+        self.CHAT.setFadeness(self.CHAT.NEVER_FADE, self.CHAT.NEVER_FADE)
     else
-        -- defaults from:
-        -- script d(CHAT_SYSTEM.primaryContainer.windows[1].buffer:GetLineFade())
-        if self.CreateNewChatTabBackup then
-            self.CreateNewChatTabBackup = CHAT_SYSTEM.CreateNewChatTab
-            setChatFadeness(25, 2)
-        end
+        CHAT_SYSTEM.CreateNewChatTab = self.backupCreateNewChatTab
+        self.CHAT.setFadeness(self.CHAT.DEFAULT_BEGIN, self.CHAT.DEFAULT_DURATION)
     end
 end
