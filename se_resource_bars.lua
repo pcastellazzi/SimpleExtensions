@@ -9,62 +9,68 @@ function SE_ResourceBars:New()
     local obj = ZO_Object.New(self)
 
     obj:Initialize({
-        always_show_resource_bars = true,
-        center_resource_bars = true,
+        always_show = true,
+        show_centered = true,
+        size_locked = true,
     })
 
     obj:controls("Resource Bars", {
         {
             type = "checkbox",
-            name = "Always Show Resource Bars",
-            tooltip = "Always Show Center Resource Bars.",
-
-            getFunc = function()
-                return obj.settings.always_show_resource_bars
-            end,
-
-            setFunc = function(value)
-                obj.settings.always_show_resource_bars = value
-                obj:toggleAlwaysShowResourceBars()
-            end,
+            name = "Always show",
+            tooltip = "Always show.",
+            getFunc = function() return obj.settings.always_show end,
+            setFunc = function(value) obj:toggleAlwaysShow(value) end,
         },
         {
             type = "checkbox",
-            name = "Center Resource Bars",
-            tooltip = "Center Resource Bars.",
-
-            getFunc = function()
-                return obj.settings.center_resource_bars
-            end,
-
-            setFunc = function(value)
-                obj.settings.center_resource_bars = value
-                obj:toggleCenterResourceBars()
-            end,
+            name = "Show centered",
+            tooltip = "Show centered.",
+            getFunc = function() return obj.settings.show_centered end,
+            setFunc = function(value) obj:toggleShowCentered(value) end,
         },
-
+        {
+            type = "checkbox",
+            name = "Size locked",
+            tooltip = "Size locked.",
+            getFunc = function() return obj.settings.size_locked end,
+            setFunc = function(value) obj:toggleSizeLock(value) end,
+        },
     })
 
     obj.default_anchors = {}
+    obj.default_sizes = {}
 
     return obj
 end
 
 function SE_ResourceBars:Run()
-    self:saveDefaultAnchors()
-    self:toggleCenterResourceBars()
-    self:toggleAlwaysShowResourceBars()
+    EVENT_MANAGER:RegisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED, function()
+        EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
+        self:saveDefaultAnchors()
+        self:toggleAlwaysShow()
+        self:toggleShowCentered()
+        self:toggleSizeLock()
+    end)
 end
 
-function SE_ResourceBars:toggleAlwaysShowResourceBars()
-    if self.settings.always_show_resource_bars then
+function SE_ResourceBars:toggleAlwaysShow(value)
+    if (value ~= nil) then
+        self.settings.always_show = value
+    end
+
+    if self.settings.always_show then
         SetSetting(SETTING_TYPE_UI, UI_SETTING_FADE_PLAYER_BARS, "0")
     else
         SetSetting(SETTING_TYPE_UI, UI_SETTING_FADE_PLAYER_BARS, "1")
     end
 end
 
-function SE_ResourceBars:toggleCenterResourceBars()
+function SE_ResourceBars:toggleShowCentered(value)
+    if (value ~= nil) then
+        self.settings.center_resource_bars = value
+    end
+
     local rb = hp:GetParent()
 
     if self.settings.center_resource_bars then
@@ -95,4 +101,32 @@ function SE_ResourceBars:restoreDefaultAnchors()
         bar:ClearAnchors()
         bar:SetAnchor(unpack(data))
     end
+end
+
+function SE_ResourceBars:toggleSizeLock(value)
+    if (value ~= nil) then
+        self.settings.size_locked = value
+    end
+
+    for k, v in pairs(PLAYER_ATTRIBUTE_BARS.attributeVisualizer.visualModules) do
+		if (v.expandedWidth) then
+            if (not self.default_sizes.expandedWidth or not self.default_sizes.shrunkWidth) then
+			    self.default_sizes.expandedWidth = v.expandedWidth
+                self.default_sizes.shrunkWidth = v.shrunkWidth
+			end
+
+			if (self.settings.size_locked) then
+                v.expandedWidth, v.shrunkWidth = v.normalWidth, v.normalWidth
+                for stat, _ in pairs(v.barControls) do
+                    v.barInfo[stat].state = ATTRIBUTE_BAR_STATE_NORMAL
+                end
+			else
+                v.expandedWidth = self.default_sizes.expandedWidth
+                v.shrunkWidth = self.default_sizes.shrunkWidth
+                v.barInfo = {}
+                v:OnUnitChanged()
+			end
+            v:OnUnitChanged()
+		end
+	end
 end

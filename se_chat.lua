@@ -25,29 +25,15 @@ function SE_Chat:New()
             type = "checkbox",
             name = "Enable full resizing",
             tooltip = "Allow chat window to be resized to any size.",
-
-            getFunc = function()
-                return obj.settings.is_full_resize_enabled
-            end,
-
-            setFunc = function(value)
-                obj.settings.is_full_resize_enabled = value
-                obj:toggleFullResize()
-            end,
+            getFunc = function() return obj.settings.is_full_resize_enabled end,
+            setFunc = function(value) obj:toggleFullResize(value) end,
         },
         {
             type = "checkbox",
             name = "Always present",
             tooltip = "Ensure the chat windows do not fade away.",
-
-            getFunc = function()
-                return obj.settings.is_always_present
-            end,
-
-            setFunc = function(value)
-                obj.settings.is_always_present = value
-                obj:toggleAlwaysPresent()
-            end
+            getFunc = function() return obj.settings.is_always_present end,
+            setFunc = function(value) obj:toggleAlwaysPresent(value) end,
         },
     })
 
@@ -56,6 +42,8 @@ end
 
 function SE_Chat:Run()
     EVENT_MANAGER:RegisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED, function()
+        EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
+
         self.backupCreateNewChatTab = CHAT_SYSTEM.CreateNewChatTab
         self.customCreateNewChatTab = function(instance, ...)
             self.createNewChatTabBackup(instance, ...)
@@ -63,13 +51,16 @@ function SE_Chat:Run()
         end
 
         self:toggleAlwaysPresent()
-        EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
     end)
 
     self:toggleFullResize()
 end
 
-function SE_Chat:toggleFullResize()
+function SE_Chat:toggleFullResize(value)
+    if (value ~= nil) then
+        self.settings.is_full_resize_enabled = value
+    end
+
     if self.settings.is_full_resize_enabled then
         CHAT_SYSTEM.maxContainerWidth, CHAT_SYSTEM.maxContainerHeight = GuiRoot:GetDimensions()
     else
@@ -79,7 +70,11 @@ function SE_Chat:toggleFullResize()
     end
 end
 
-function SE_Chat:toggleAlwaysPresent(begin, duration)
+function SE_Chat:toggleAlwaysPresent(value)
+    if (value ~= nil) then
+        self.settings.is_always_present = value
+    end
+
     if self.settings.is_always_present then
         CHAT_SYSTEM.CreateNewChatTab = self.customCreateNewChatTab
         self.CHAT.setFadeness(self.CHAT.NEVER_FADE, self.CHAT.NEVER_FADE)

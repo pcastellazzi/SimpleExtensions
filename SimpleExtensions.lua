@@ -57,6 +57,7 @@ function SimpleExtension.Execute()
     for _, extension in ipairs(SimpleExtension._extensions) do
         local e = extension:New()
         e:Run()
+        _G[e.SE_NAME] = e
     end
 
     SimpleExtension._lam:RegisterOptionControls(SimpleExtension.SE_PANEL, SimpleExtension._controls)
