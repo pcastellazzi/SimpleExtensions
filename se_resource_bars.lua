@@ -68,12 +68,12 @@ end
 
 function SE_ResourceBars:toggleShowCentered(value)
     if (value ~= nil) then
-        self.settings.center_resource_bars = value
+        self.settings.show_centered = value
     end
 
     local rb = hp:GetParent()
 
-    if self.settings.center_resource_bars then
+    if self.settings.show_centered then
         local anchors = {
             [hp] = {CENTER  , rb, CENTER    ,  0,  0},
             [sp] = {LEFT    , hp, RIGHT     ,  8,  0},
