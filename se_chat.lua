@@ -46,7 +46,7 @@ function SE_Chat:Run()
 
         self.backupCreateNewChatTab = CHAT_SYSTEM.CreateNewChatTab
         self.customCreateNewChatTab = function(instance, ...)
-            self.createNewChatTabBackup(instance, ...)
+            self.backupCreateNewChatTab(instance, ...)
             self.CHAT.setFadeness(self.CHAT.NEVER_FADE, self.CHAT.NEVER_FADE)
         end
 
