@@ -1,7 +1,7 @@
 -- http://esoapi.uesp.net/100019/data/k/e/y/KeybindingsManager.IsChordingAlwaysEnabled.html
 -- https://en.wikipedia.org/wiki/Chorded_keyboard
-function KeybindingsManager:IsChordingAlwaysEnabled()
-    return true
+function KEYBINDING_MANAGER:IsChordingAlwaysEnabled()
+	return true
 end
 
 EVENT_MANAGER:RegisterForEvent("SimpleExtensions", EVENT_ADD_ON_LOADED, function (event, name)
