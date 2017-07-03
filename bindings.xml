@@ -1,0 +1,18 @@
+<Bindings>
+	<Layer name="SI_KEYBINDINGS_LAYER_GENERAL">
+		<Category name="Simple Extensions: Quick Slots">
+			<Action name="SE_QUICK_SLOT_1"><Down>SE_QUICK_SLOTS:Set(1)</Down></Action>
+			<Action name="SE_QUICK_SLOT_2"><Down>SE_QUICK_SLOTS:Set(2)</Down></Action>
+			<Action name="SE_QUICK_SLOT_3"><Down>SE_QUICK_SLOTS:Set(3)</Down></Action>
+			<Action name="SE_QUICK_SLOT_4"><Down>SE_QUICK_SLOTS:Set(4)</Down></Action>
+
+			<Action name="SE_QUICK_SLOT_5"><Down>SE_QUICK_SLOTS:Set(5)</Down></Action>
+			<Action name="SE_QUICK_SLOT_6"><Down>SE_QUICK_SLOTS:Set(6)</Down></Action>
+			<Action name="SE_QUICK_SLOT_7"><Down>SE_QUICK_SLOTS:Set(7)</Down></Action>
+			<Action name="SE_QUICK_SLOT_8"><Down>SE_QUICK_SLOTS:Set(8)</Down></Action>
+
+			<Action name="SE_QUICK_SLOT_NEXT"><Down>SE_QUICK_SLOTS:Next()</Down></Action>
+			<Action name="SE_QUICK_SLOT_PREV"><Down>SE_QUICK_SLOTS:Prev()</Down></Action>
+		</Category>
+	</Layer>
+</Bindings>

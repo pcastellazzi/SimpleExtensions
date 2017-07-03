@@ -1,7 +1,7 @@
 ﻿## Title: Simple Extensions
 ## Description: Simple Extensions
 ## Version: 1.0
-## APIVersion: 100017
+## APIVersion: 100019
 ## Author: CastePablo
 ## SavedVariables: SimpleExtensions
 
@@ -32,5 +32,6 @@ SimpleExtensions.lua
 se_action_bar.lua
 se_chat.lua
 se_resource_bars.lua
+se_quick_slots.lua
 se_boot.lua
-; bindings.xml
+bindings.xml

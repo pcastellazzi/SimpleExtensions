@@ -2,7 +2,6 @@ TODO
 ====
 
 * Chat: remove log in/out messages
-* Action Bar: Quick slot key bindings
 * Junk: Remember Junk
 * Junk: Keep set items
 * Junk: Mark ingredients not in bank automatically
