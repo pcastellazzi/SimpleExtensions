@@ -6,7 +6,7 @@ SimpleExtension = {
     SE_VERSION = "1.1",
     SE_WEBSITE = "https://github.com/pcastellazzi/simpleextensions",
 
-    _controls = {},
+    _controls = {{ type = "custom" }},
     _extensions = {},
     _lam = LibStub("LibAddonMenu-2.0"),
     _settings = {},
