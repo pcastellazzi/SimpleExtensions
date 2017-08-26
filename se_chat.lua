@@ -56,30 +56,24 @@ function SE_Chat:Run()
     self:toggleFullResize()
 end
 
-function SE_Chat:toggleFullResize(value)
-    if (value ~= nil) then
-        self.settings.is_full_resize_enabled = value
-    end
-
-    if self.settings.is_full_resize_enabled then
-        CHAT_SYSTEM.maxContainerWidth, CHAT_SYSTEM.maxContainerHeight = GuiRoot:GetDimensions()
-    else
-        for i = 1, #CHAT_SYSTEM.containers do
-            CHAT_SYSTEM:ResetContainerPositionAndSize(CHAT_SYSTEM.containers[i])
-        end
-    end
-end
-
 function SE_Chat:toggleAlwaysPresent(value)
-    if (value ~= nil) then
-        self.settings.is_always_present = value
-    end
-
+    self.settings.is_always_present = (value == nil) or value
     if self.settings.is_always_present then
         CHAT_SYSTEM.CreateNewChatTab = self.customCreateNewChatTab
         self.CHAT.setFadeness(self.CHAT.NEVER_FADE, self.CHAT.NEVER_FADE)
     else
         CHAT_SYSTEM.CreateNewChatTab = self.backupCreateNewChatTab
         self.CHAT.setFadeness(self.CHAT.DEFAULT_BEGIN, self.CHAT.DEFAULT_DURATION)
+    end
+end
+
+function SE_Chat:toggleFullResize(value)
+    self.settings.is_full_resize_enabled = (value == nil) or value
+    if self.settings.is_full_resize_enabled then
+        CHAT_SYSTEM.maxContainerWidth, CHAT_SYSTEM.maxContainerHeight = GuiRoot:GetDimensions()
+    else
+        for i = 1, #CHAT_SYSTEM.containers do
+            CHAT_SYSTEM:ResetContainerPositionAndSize(CHAT_SYSTEM.containers[i])
+        end
     end
 end
