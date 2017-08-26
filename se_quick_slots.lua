@@ -2,10 +2,7 @@ local SE_QuickSlots = SimpleExtension.Create("SE_QUICK_SLOTS", 1)
 
 SE_QuickSlots.FIRST_SLOT = 1
 SE_QuickSlots.LAST_SLOT = 8
-
-SE_QuickSlots.SLOT_IDS = {
-    12, 11, 10, 9, 16, 15, 14, 13
-}
+SE_QuickSlots.SLOT_IDS = {12, 11, 10, 9, 16, 15, 14, 13}
 
 SE_QuickSlots.SLOTS_TEXT = {
     SE_QUICK_SLOT_1 = 'Set Quick Slot 1',
@@ -21,7 +18,10 @@ SE_QuickSlots.SLOTS_TEXT = {
 }
 
 function SE_QuickSlots:New()
-    return ZO_Object.New(self)
+    local obj = ZO_Object.New(self)
+    obj:Initialize({})
+    obj:controls("Quick Slots", {})
+    return obj
 end
 
 function SE_QuickSlots:Run()
@@ -30,7 +30,7 @@ function SE_QuickSlots:Run()
     end
 end
 
-function SE_QuickSlots:Get()
+function SE_QuickSlots:get()
     local currentId = GetCurrentQuickslot()
 
     for i, id in ipairs(self.SLOT_IDS) do
@@ -42,26 +42,26 @@ function SE_QuickSlots:Get()
     return 1
 end
 
-function SE_QuickSlots:Set(slot)
-    SetCurrentQuickslot(self.SLOT_IDS[slot])
-end
-
-function SE_QuickSlots:Next()
-    local nextSlot = self:Get() + 1
+function SE_QuickSlots:next()
+    local nextSlot = self:get() + 1
 
     if nextSlot > self.LAST_SLOT then
         nextSlot = self.FIRST_SLOT
     end
 
-    self:Set(nextSlot)
+    self:set(nextSlot)
 end
 
-function SE_QuickSlots:Prev()
-    local prevSlot = self:Get() - 1
+function SE_QuickSlots:prev()
+    local prevSlot = self:get() - 1
 
     if prevSlot < self.FIRST_SLOT then
         prevSlot = self.LAST_SLOT
     end
 
-    self:Set(prevSlot)
+    self:set(prevSlot)
+end
+
+function SE_QuickSlots:set(slot)
+    SetCurrentQuickslot(self.SLOT_IDS[slot])
 end

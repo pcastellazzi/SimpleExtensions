@@ -54,6 +54,20 @@ function SE_ResourceBars:Run()
     end)
 end
 
+function SE_ResourceBars:restoreDefaultAnchors()
+    for bar, data in pairs(self.default_anchors) do
+        bar:ClearAnchors()
+        bar:SetAnchor(unpack(data))
+    end
+end
+
+function SE_ResourceBars:saveDefaultAnchors()
+    for _, bar in ipairs({hp, sp, mp}) do
+        local isValid, point, relTo, relPoint, offsX, offsY = bar:GetAnchor()
+        self.default_anchors[bar] = {point, relTo, relPoint, offsX, offsY}
+    end
+end
+
 function SE_ResourceBars:toggleAlwaysShow(value)
     if (value ~= nil) then
         self.settings.always_show = value
@@ -75,9 +89,9 @@ function SE_ResourceBars:toggleShowCentered(value)
 
     if self.settings.show_centered then
         local anchors = {
-            [hp] = {CENTER  , rb, CENTER    ,  0,  0},
-            [sp] = {LEFT    , hp, RIGHT     ,  8,  0},
-            [mp] = {RIGHT   , hp, LEFT      , -8,  0},
+            [hp] = {CENTER  , rb, CENTER    ,   0,  0},
+            [sp] = {LEFT    , hp, RIGHT     ,  12,  0},
+            [mp] = {RIGHT   , hp, LEFT      , -12,  0},
         }
         for bar, data in pairs(anchors) do
             local w, h = bar:GetDimensions()
@@ -89,25 +103,8 @@ function SE_ResourceBars:toggleShowCentered(value)
     end
 end
 
-function SE_ResourceBars:saveDefaultAnchors()
-    for _, bar in ipairs({hp, sp, mp}) do
-        local isValid, point, relTo, relPoint, offsX, offsY = bar:GetAnchor()
-        self.default_anchors[bar] = {point, relTo, relPoint, offsX, offsY}
-    end
-end
-
-function SE_ResourceBars:restoreDefaultAnchors()
-    for bar, data in pairs(self.default_anchors) do
-        bar:ClearAnchors()
-        bar:SetAnchor(unpack(data))
-    end
-end
-
 function SE_ResourceBars:toggleSizeLock(value)
-    if (value ~= nil) then
-        self.settings.size_locked = value
-    end
-
+    self.settings.size_locked = (value == nil) or value
     for k, v in pairs(PLAYER_ATTRIBUTE_BARS.attributeVisualizer.visualModules) do
 		if (v.expandedWidth) then
             if (not self.default_sizes.expandedWidth or not self.default_sizes.shrunkWidth) then

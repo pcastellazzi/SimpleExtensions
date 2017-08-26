@@ -1,19 +1,9 @@
-SimpleExtension.Base = ZO_Object:Subclass()
-
 function SimpleExtension.Base:Initialize(defaults)
     if SimpleExtension._settings[self.SE_NAME] == nil then
         SimpleExtension._settings[self.SE_NAME] = defaults
+        SimpleExtension._settings[self.SE_NAME]["_enabled"] = true
     end
     self.settings = SimpleExtension._settings[self.SE_NAME]
-end
-
-function SimpleExtension.Create(name, version)
-    local extension = ZO_Object.MultiSubclass(SimpleExtension.Base)
-    extension.SE_NAME = name
-    extension.SE_VERSION = version
-
-    table.insert(SimpleExtension._extensions, extension)
-    return extension
 end
 
 function SimpleExtension.Base:controls(header, controls)
@@ -22,9 +12,31 @@ function SimpleExtension.Base:controls(header, controls)
         name = header
     })
 
-    for _, control in ipairs(controls) do
-        table.insert(SimpleExtension._controls, control)
+    table.insert(SimpleExtension._controls, {
+        type = "checkbox",
+        name = "Enable extension",
+        tooltip = "Enable extension.",
+        requiresReload = true,
+
+        getFunc = function()
+            local value = SimpleExtension._settings[self.SE_NAME]["_enabled"]
+            return (value == nil) or value
+        end,
+
+        setFunc = function(value)
+            SimpleExtension._settings[self.SE_NAME]["_enabled"] = (value == nil) or value
+        end,
+    })
+
+    if self:enabled() then
+        for _, control in ipairs(controls) do
+            table.insert(SimpleExtension._controls, control)
+        end
     end
+
+    table.insert(SimpleExtension._controls, {
+        type = "custom",
+    })
 end
 
 function SimpleExtension.Base:debug(format, ...)
@@ -32,4 +44,8 @@ function SimpleExtension.Base:debug(format, ...)
         format = self.SE_NAME .. ": " .. format
     end
     d(string.format(format, ...))
+end
+
+function SimpleExtension.Base:enabled()
+    return SimpleExtension._settings[self.SE_NAME]["_enabled"]
 end
