@@ -1,13 +1,12 @@
 function SimpleExtension.Base:Initialize(defaults)
     if SimpleExtension._settings[self.SE_NAME] == nil then
         SimpleExtension._settings[self.SE_NAME] = defaults
-
-        SimpleExtension._settings[self.SE_NAME]._cache = {}
         SimpleExtension._settings[self.SE_NAME]._debug = false
         SimpleExtension._settings[self.SE_NAME]._enabled = true
 
     end
     self.settings = SimpleExtension._settings[self.SE_NAME]
+    self._cache = {}
 end
 
 
