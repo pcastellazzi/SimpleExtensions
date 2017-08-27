@@ -14,15 +14,15 @@ SimpleExtension = {
     Base = ZO_Object:Subclass(),
 }
 
+
 function SimpleExtension.Create(name, version)
     local extension = ZO_Object.MultiSubclass(SimpleExtension.Base)
     extension.SE_NAME = name
     extension.SE_VERSION = version
-
     table.insert(SimpleExtension._extensions, extension)
-
     return extension
 end
+
 
 function SimpleExtension.Execute()
     SimpleExtension._settings = ZO_SavedVars:NewAccountWide(
@@ -39,7 +39,7 @@ function SimpleExtension.Execute()
 
     for _, extension in ipairs(SimpleExtension._extensions) do
         local e = extension:New()
-        if e:enabled() then
+        if e:isEnabled() then
             e:Run()
             _G[e.SE_NAME] = e
         end

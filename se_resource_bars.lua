@@ -1,9 +1,11 @@
+local SE_ResourceBars = SimpleExtension.Create("SE_RESOURCE_BARS", 1)
+
+
 local wm = GetWindowManager()
 local hp = ZO_PlayerAttributeHealth
 local mp = ZO_PlayerAttributeMagicka
 local sp = ZO_PlayerAttributeStamina
 
-local SE_ResourceBars = SimpleExtension.Create("SE_RESOURCE_BARS", 1)
 
 function SE_ResourceBars:New()
     local obj = ZO_Object.New(self)
@@ -44,6 +46,7 @@ function SE_ResourceBars:New()
     return obj
 end
 
+
 function SE_ResourceBars:Run()
     EVENT_MANAGER:RegisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED, function()
         EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
@@ -54,12 +57,14 @@ function SE_ResourceBars:Run()
     end)
 end
 
+
 function SE_ResourceBars:restoreDefaultAnchors()
     for bar, data in pairs(self.default_anchors) do
         bar:ClearAnchors()
         bar:SetAnchor(unpack(data))
     end
 end
+
 
 function SE_ResourceBars:saveDefaultAnchors()
     for _, bar in ipairs({hp, sp, mp}) do
@@ -68,11 +73,9 @@ function SE_ResourceBars:saveDefaultAnchors()
     end
 end
 
-function SE_ResourceBars:toggleAlwaysShow(value)
-    if (value ~= nil) then
-        self.settings.always_show = value
-    end
 
+function SE_ResourceBars:toggleAlwaysShow(value)
+    self.settings.always_show = (value == nil) or value
     if self.settings.always_show then
         SetSetting(SETTING_TYPE_UI, UI_SETTING_FADE_PLAYER_BARS, "0")
     else
@@ -80,18 +83,15 @@ function SE_ResourceBars:toggleAlwaysShow(value)
     end
 end
 
+
 function SE_ResourceBars:toggleShowCentered(value)
-    if (value ~= nil) then
-        self.settings.show_centered = value
-    end
-
-    local rb = hp:GetParent()
-
+    self.settings.show_centered = (value == nil) or value
     if self.settings.show_centered then
+        local rb = hp:GetParent()
         local anchors = {
-            [hp] = {CENTER  , rb, CENTER    ,   0,  0},
-            [sp] = {LEFT    , hp, RIGHT     ,  12,  0},
-            [mp] = {RIGHT   , hp, LEFT      , -12,  0},
+            [hp] = {CENTER, rb, CENTER,   0,  0},
+            [sp] = {LEFT  , hp, RIGHT ,  12,  0},
+            [mp] = {RIGHT , hp, LEFT  , -12,  0},
         }
         for bar, data in pairs(anchors) do
             local w, h = bar:GetDimensions()
@@ -103,6 +103,7 @@ function SE_ResourceBars:toggleShowCentered(value)
     end
 end
 
+
 function SE_ResourceBars:toggleSizeLock(value)
     self.settings.size_locked = (value == nil) or value
     for k, v in pairs(PLAYER_ATTRIBUTE_BARS.attributeVisualizer.visualModules) do
@@ -111,7 +112,6 @@ function SE_ResourceBars:toggleSizeLock(value)
 			    self.default_sizes.expandedWidth = v.expandedWidth
                 self.default_sizes.shrunkWidth = v.shrunkWidth
 			end
-
 			if (self.settings.size_locked) then
                 v.expandedWidth, v.shrunkWidth = v.normalWidth, v.normalWidth
                 for stat, _ in pairs(v.barControls) do

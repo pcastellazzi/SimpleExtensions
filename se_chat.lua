@@ -1,8 +1,9 @@
 local SE_Chat = SimpleExtension.Create("SE_CHAT", 1)
 
+
 SE_Chat.CHAT = {
-    NEVER_FADE       = 0,
-    DEFAULT_BEGIN    = 25,
+    NEVER_FADE = 0,
+    DEFAULT_BEGIN = 25,
     DEFAULT_DURATION = 2,
 
     setFadeness = function(begin, duration)
@@ -11,6 +12,7 @@ SE_Chat.CHAT = {
         end
     end
 }
+
 
 function SE_Chat:New()
     local obj = ZO_Object.New(self)
@@ -40,6 +42,7 @@ function SE_Chat:New()
     return obj
 end
 
+
 function SE_Chat:Run()
     EVENT_MANAGER:RegisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED, function()
         EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
@@ -56,6 +59,7 @@ function SE_Chat:Run()
     self:toggleFullResize()
 end
 
+
 function SE_Chat:toggleAlwaysPresent(value)
     self.settings.is_always_present = (value == nil) or value
     if self.settings.is_always_present then
@@ -66,6 +70,7 @@ function SE_Chat:toggleAlwaysPresent(value)
         self.CHAT.setFadeness(self.CHAT.DEFAULT_BEGIN, self.CHAT.DEFAULT_DURATION)
     end
 end
+
 
 function SE_Chat:toggleFullResize(value)
     self.settings.is_full_resize_enabled = (value == nil) or value

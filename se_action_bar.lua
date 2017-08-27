@@ -1,5 +1,6 @@
 local SE_ActionBar = SimpleExtension.Create("SE_ACTION_BAR", 1)
 
+
 function SE_ActionBar:New()
     local obj = ZO_Object.New(self)
 
@@ -28,6 +29,7 @@ function SE_ActionBar:New()
     return obj
 end
 
+
 function SE_ActionBar:Run()
     EVENT_MANAGER:RegisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED, function()
         EVENT_MANAGER:UnregisterForEvent(self.SE_NAME, EVENT_PLAYER_ACTIVATED)
@@ -36,11 +38,9 @@ function SE_ActionBar:Run()
     end)
 end
 
-function SE_ActionBar:toggleHideBarSwapButton(value)
-    if (value ~= nil) then
-        self.settings.hide_bar_swap_button = value
-    end
 
+function SE_ActionBar:toggleHideBarSwapButton(value)
+    self.settings.hide_bar_swap_button = (value == nil) or value
     if self.settings.hide_bar_swap_button then
         ZO_ActionBar1WeaponSwap:SetAlpha(0)
 	    ZO_ActionBar1WeaponSwapLock:SetAlpha(0)
@@ -50,11 +50,9 @@ function SE_ActionBar:toggleHideBarSwapButton(value)
     end
 end
 
-function SE_ActionBar:toggleHideKeyBindingsBackground(value)
-    if (value ~= nil) then
-        self.settings.hide_key_bindings_background = value
-    end
 
+function SE_ActionBar:toggleHideKeyBindingsBackground(value)
+    self.settings.hide_key_bindings_background = (value == nil) or value
     if self.settings.hide_key_bindings_background then
         ZO_ActionBar1KeybindBG:SetAlpha(0)
     else
