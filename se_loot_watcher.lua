@@ -44,7 +44,7 @@ end
 
 function SE_LootWatcher:getCharacterName(character)
     return self:cache("CHARACTER_NAME", character, function()
-        string.format(
+        return string.format(
             "|H0:character:%s|h%s|h", character, LocalizeString("<<1>>", character));
     end)
 end
@@ -68,7 +68,6 @@ function SE_LootWatcher:handlerLootReceived(eventCode, receivedBy, itemName, qua
             lootType = lootType,
             itemId = itemId,
         }
-        d(SE_LOOT_WATCHER.last)
     end)
 
     if not self.WANTED_LOOT_TYPES[lootType] then return end
@@ -79,10 +78,18 @@ function SE_LootWatcher:handlerLootReceived(eventCode, receivedBy, itemName, qua
     local itemQuality = GetItemLinkQuality(itemName)
     if not (itemQuality >= ITEM_QUALITY_ARCANE) then return end
 
+    self:debugAction(function()
+        d({
+            itemName:gsub("^|H0", "|H1", 1),
+            self:getItemTraitString(itemName),
+            self:getQuantityString(quantity),
+            self:getCharacterName(receivedBy),
+        })
+    end)
     CHAT_SYSTEM:AddMessage(string.format("[LOOT] %s%s%s → %s",
         itemName:gsub("^|H0", "|H1", 1),
-        self:getQuantityString(quantity),
         self:getItemTraitString(itemName),
+        self:getQuantityString(quantity),
         self:getCharacterName(receivedBy)
     ));
 end
