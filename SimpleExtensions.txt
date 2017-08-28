@@ -35,6 +35,7 @@ se_base.lua
 ; extensions
 se_action_bar.lua
 se_chat.lua
+se_junk_watcher.lua
 se_loot_watcher.lua
 se_resource_bars.lua
 se_quick_slots.lua

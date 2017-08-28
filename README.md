@@ -2,10 +2,12 @@ TODO
 ====
 
 * Chat: remove log in/out messages
-* Junk: Remember Junk
-* Junk: Keep set items
-* Junk: Mark ingredients not in bank automatically
-* Junk: Mark traits not in bank automatically
-* Junk: Mark 0 value as junk automatically
 * Junk: Add sell all junk to nuzimeth
 * All: localization
+
+* doc
+  * emacs mode
+  * chat
+  * loot watcher
+  * quick slots
+  * resource bars
