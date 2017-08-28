@@ -3,14 +3,43 @@ function SimpleExtension.Base:Initialize(defaults)
         SimpleExtension._settings[self.SE_NAME] = defaults
         SimpleExtension._settings[self.SE_NAME]._debug = false
         SimpleExtension._settings[self.SE_NAME]._enabled = true
+    else
+        -- remove obsolete keys
+        for key, _ in pairs(SimpleExtension._settings[self.SE_NAME]) do
+            if string.sub(key, 1, 1) ~= "_" and defaults[key] == nil then
+                SimpleExtension._settings[self.SE_NAME][key] = nil
+            end
+        end
 
+        -- set new keys to its default value
+        for key, value in pairs(defaults) do
+            if SimpleExtension._settings[self.SE_NAME][key] == nil then
+                SimpleExtension._settings[self.SE_NAME][key] = value
+            end
+        end
     end
+
     self.settings = SimpleExtension._settings[self.SE_NAME]
     self._cache = {}
 end
 
 
-function SimpleExtension.Base:addBooleanOption(name, storage, flag)
+function SimpleExtension.Base:addDebugOption()
+    local checkbox = self:buildBooleanOption(
+        "Enable debug", SimpleExtension._settings[self.SE_NAME], "_debug")
+    table.insert(SimpleExtension._controls, checkbox)
+end
+
+
+function SimpleExtension.Base:addEnableOption()
+    local checkbox = self:buildBooleanOption(
+        "Enable extension", SimpleExtension._settings[self.SE_NAME], "_enabled")
+    checkbox.requiresReload = true
+    table.insert(SimpleExtension._controls, checkbox)
+end
+
+
+function SimpleExtension.Base:buildBooleanOption(name, storage, flag)
     local checkbox = {
         type = "checkbox",
         name = name,
@@ -24,21 +53,7 @@ function SimpleExtension.Base:addBooleanOption(name, storage, flag)
             storage[flag] = (value == nil) or value
         end,
     }
-    table.insert(SimpleExtension._controls, checkbox)
     return checkbox
-end
-
-
-function SimpleExtension.Base:addDebugOption()
-    self:addBooleanOption(
-        "Enable debug", SimpleExtension._settings[self.SE_NAME], "_debug")
-end
-
-
-function SimpleExtension.Base:addEnableOption()
-    local checkbox = self:addBooleanOption(
-        "Enable extension", SimpleExtension._settings[self.SE_NAME], "_enabled")
-    checkbox.requiresReload = true
 end
 
 
