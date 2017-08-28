@@ -20,21 +20,18 @@ function SE_ResourceBars:New()
         {
             type = "checkbox",
             name = "Always show",
-            tooltip = "Always show.",
             getFunc = function() return obj.settings.always_show end,
             setFunc = function(value) obj:toggleAlwaysShow(value) end,
         },
         {
             type = "checkbox",
             name = "Show centered",
-            tooltip = "Show centered.",
             getFunc = function() return obj.settings.show_centered end,
             setFunc = function(value) obj:toggleShowCentered(value) end,
         },
         {
             type = "checkbox",
             name = "Size locked",
-            tooltip = "Size locked.",
             getFunc = function() return obj.settings.size_locked end,
             setFunc = function(value) obj:toggleSizeLock(value) end,
         },

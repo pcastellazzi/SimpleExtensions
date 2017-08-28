@@ -13,14 +13,12 @@ function SE_ActionBar:New()
         {
             type = "checkbox",
             name = "Hide bar swap button",
-            tooltip = "Hide bar swap button.",
             getFunc = function() return obj.settings.hide_bar_swap_button end,
             setFunc = function(value) obj:toggleHideBarSwapButton(value) end,
         },
         {
             type = "checkbox",
             name = "Hide key bindings' background",
-            tooltip = "Hide key bindings' background.",
             getFunc = function() return obj.settings.hide_key_bindings_background end,
             setFunc = function(value) obj:toggleHideKeyBindingsBackground(value) end,
         },

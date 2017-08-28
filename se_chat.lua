@@ -26,14 +26,12 @@ function SE_Chat:New()
         {
             type = "checkbox",
             name = "Enable full resizing",
-            tooltip = "Allow chat window to be resized to any size.",
             getFunc = function() return obj.settings.is_full_resize_enabled end,
             setFunc = function(value) obj:toggleFullResize(value) end,
         },
         {
             type = "checkbox",
             name = "Always present",
-            tooltip = "Ensure the chat windows do not fade away.",
             getFunc = function() return obj.settings.is_always_present end,
             setFunc = function(value) obj:toggleAlwaysPresent(value) end,
         },
